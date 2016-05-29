@@ -5,9 +5,6 @@ const App = React.createClass({
   render() {
     return (
       <AppLayout>
-        <div>
-          Hello?
-        </div>
         {this.props.children}
       </AppLayout>
     );
@@ -24,6 +21,9 @@ const Routes = React.createClass({
           path='/'
           component={App}
         >
+          <IndexRoute
+            component={RestaurantTable}
+          />
         </Route>
       </Router>
     );
