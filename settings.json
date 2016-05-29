@@ -1,0 +1,8 @@
+{
+  "mysql": {
+    "host": "ec2-54-191-70-38.us-west-2.compute.amazonaws.com",
+    "user": "radiant",
+    "password": "radiant",
+    "database": "radiant"
+  }
+}

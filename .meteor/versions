@@ -13,6 +13,8 @@ caching-compiler@1.0.4
 caching-html-compiler@1.0.6
 callback-hook@1.0.8
 check@1.2.1
+coffeescript@1.0.17
+cosmos:browserify@0.9.4
 ddp@1.2.5
 ddp-client@1.2.7
 ddp-common@1.2.5
@@ -33,6 +35,7 @@ id-map@1.0.7
 insecure@1.0.7
 jquery@1.11.8
 launch-screen@1.0.11
+less@2.6.0
 livedata@1.0.18
 logging@1.0.12
 meteor@1.1.14
@@ -47,11 +50,16 @@ modules-runtime@0.6.3
 mongo@1.1.7
 mongo-id@1.0.4
 npm-mongo@1.4.43
+numtel:mysql@1.0.6
 observe-sequence@1.0.11
 ordered-dict@1.0.7
 promise@0.6.7
 random@1.0.9
+react@15.0.1
+react-meteor-data@0.2.9
+react-runtime@15.0.1
 reactive-var@1.0.9
+reactrouter:react-router@2.0.2
 reload@1.1.8
 retry@1.0.7
 routepolicy@1.0.10
@@ -61,6 +69,7 @@ standard-minifier-css@1.0.6
 standard-minifier-js@1.0.6
 templating@1.1.9
 templating-tools@1.0.4
+tmeasday:check-npm-versions@0.2.0
 tracker@1.0.13
 ui@1.0.11
 underscore@1.0.8
