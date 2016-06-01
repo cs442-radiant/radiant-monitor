@@ -18,6 +18,11 @@ Meteor.methods({
       )[0]['COUNT(*)'];
     }
 
+    response.bundle = Meteor.call('dbQuery',
+      'SELECT * FROM Bundle WHERE id = ?',
+      [bundleId]
+    )[0];
+
     return response;
   }
 });

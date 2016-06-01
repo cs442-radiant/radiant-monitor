@@ -14,7 +14,16 @@ BundleTable = React.createClass({
       self.setState({
         rows: result.payload,
         numItems: result.numItems,
+        bundle: result.bundle,
         isLoaded: true
+      });
+
+      console.log(result.bundle);
+
+      Meteor.call('getRestaurant', result.bundle.restaurantId, (err, result) => {
+        self.setState({
+          restaurantName: result.name
+        });
       });
     });
   },
@@ -68,13 +77,13 @@ BundleTable = React.createClass({
       (
         <div>
           <div>
-            {`Restaurant name: `}
+            {`Restaurant name: ${this.state.restaurantName}`}
           </div>
           <div>
             {`Bundle ID: ${this.props.params.id}`}
           </div>
           <div>
-            {`Bundle description: `}
+            {`Bundle description: ${this.state.bundle.description}`}
           </div>
           <div>
             {`Number of samples: ${this.state.numItems}`}
