@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 
 RestaurantTable = React.createClass({
   getInitialState() {
@@ -19,26 +19,27 @@ RestaurantTable = React.createClass({
     });
   },
 
+  handleClickRestaurant(id) {
+    browserHistory.push(`/restaurant/${id}`);
+  },
+
   renderRestaurants() {
     return this.state.rows.map((row, idx) => {
       return (
         <div
           key={idx}
           className='row'
+          onClick={this.handleClickRestaurant.bind(null, row.id)}
         >
           <div
-            className='entry'
+            className='entry id'
           >
             {row.id}
           </div>
           <div
             className='entry'
           >
-            <Link
-              to={`/restaurant/${row.id}`}
-            >
-              {row.name}
-            </Link>
+            {row.name}
           </div>
         </div>
       );
@@ -49,9 +50,12 @@ RestaurantTable = React.createClass({
     return this.state.isLoaded ?
       (
         <div>
-          <div>
-            {`Number of restaurants: ${this.state.numItems}`}
-          </div>
+          <InfoPanel>
+            <NumOfItems
+              name='RESTAURANTS'
+              numItems={this.state.numItems}
+            />
+          </InfoPanel>
           <div
             className='table'
           >

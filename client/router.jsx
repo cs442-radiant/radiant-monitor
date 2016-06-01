@@ -36,6 +36,14 @@ const Routes = React.createClass({
             path='bundle/:id'
             component={BundleTable}
           />
+          <Route
+            path='about'
+            component={AboutUs}
+          />
+          <Route
+            path='*'
+            component={NotFound}
+          />
         </Route>
       </Router>
     );

@@ -1,9 +1,10 @@
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 
 BundleTable = React.createClass({
   getInitialState() {
     return {
-      isLoaded: false
+      isSamplesLoaded: false,
+      isRestaurantNameLoaded: false
     };
   },
 
@@ -15,17 +16,22 @@ BundleTable = React.createClass({
         rows: result.payload,
         numItems: result.numItems,
         bundle: result.bundle,
-        isLoaded: true
+        isSamplesLoaded: true
       });
-
-      console.log(result.bundle);
 
       Meteor.call('getRestaurant', result.bundle.restaurantId, (err, result) => {
         self.setState({
-          restaurantName: result.name
+          restaurantName: result.name,
+          isRestaurantNameLoaded: true
         });
       });
     });
+  },
+
+  handleClickRestaurantName() {
+    if (this.state.bundle) {
+      browserHistory.push(`/restaurant/${this.state.bundle.restaurantId}`);
+    }
   },
 
   renderAPs(sample) {
@@ -40,9 +46,9 @@ BundleTable = React.createClass({
           className='ap'
         >
           <span
-            className='ssid'
+            className={`ssid ${ap.SSID ? '' : 'no-ssid'}`}
           >
-            {ap.SSID}
+            {ap.SSID ? ap.SSID : '(NO SSID)'}
           </span>
           <span
             className='bssid'
@@ -61,33 +67,73 @@ BundleTable = React.createClass({
 
   renderSamples() {
     return this.state.rows.map((row, idx) => {
+      const apList = JSON.parse(row.sample);
+
       return (
         <div
-          key={idx}
           className='column'
+          key={idx}
         >
-          {this.renderAPs(JSON.parse(row.sample))}
+          <div
+            className='header'
+          >
+            <span>
+              {Util.dateFormat(row.clientTimestamp)}
+            </span>
+            <div
+              className='num-of-aps'
+            >
+              {`${apList.length} AP${apList.length > 1 ? 's' : ''}`}
+            </div>
+          </div>
+          <div
+            className='ap-list'
+          >
+            {this.renderAPs(apList)}
+          </div>
         </div>
       );
     });
   },
 
   render() {
-    return this.state.isLoaded ?
+    return this.state.isSamplesLoaded ?
       (
         <div>
-          <div>
-            {`Restaurant name: ${this.state.restaurantName}`}
-          </div>
-          <div>
-            {`Bundle ID: ${this.props.params.id}`}
-          </div>
-          <div>
-            {`Bundle description: ${this.state.bundle.description}`}
-          </div>
-          <div>
-            {`Number of samples: ${this.state.numItems}`}
-          </div>
+          <InfoPanel>
+            <div
+              className='restaurant-name inline clickable'
+              onClick={this.handleClickRestaurantName}
+            >
+              {this.state.isRestaurantNameLoaded ? this.state.restaurantName : ''}
+            </div>
+            <div
+              className='bundle'
+            >
+              <span>
+                BUNDLE
+              </span>
+              <i
+                className='material-icons'
+              >
+                keyboard_arrow_right
+              </i>
+              <span
+                className='bundle-description'
+              >
+                {this.state.bundle.description}
+              </span>
+              <span
+                className='bundle-id'
+              >
+                {`(Bundle ID: ${this.props.params.id})`}
+              </span>
+            </div>
+            <NumOfItems
+              name='SAMPLES'
+              numItems={this.state.numItems}
+            />
+          </InfoPanel>
           <div
             className='sample-table'
           >

@@ -1,18 +1,33 @@
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 
 Header = React.createClass({
+  handleClickTitle() {
+    browserHistory.push('/');
+  },
+
   render() {
     return (
       <div
         className='header'
       >
-        <div>
-          Radiant Monitor
+        <div
+          className='title'
+          onClick={this.handleClickTitle}
+        >
+          RADIANT MONITOR
         </div>
-        <Header.Item
-          to='/restaurant'
-          name='SHOW RESTAURANTS'
-        />
+        <div
+          className='links'
+        >
+          <Header.Item
+            to='/restaurant'
+            name='SHOW RESTAURANTS'
+          />
+          <Header.Item
+            to='/about'
+            name='ABOUT US'
+          />
+        </div>
       </div>
     );
   }
@@ -21,7 +36,9 @@ Header = React.createClass({
 Header.Item = React.createClass({
   render() {
     return (
-      <span>
+      <span
+        className='item'
+      >
         <Link
           to={this.props.to}
         >
