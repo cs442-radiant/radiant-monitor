@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 
 BundleListTable = React.createClass({
   getInitialState() {
@@ -20,26 +20,27 @@ BundleListTable = React.createClass({
     });
   },
 
+  handleClickBundle(id) {
+    browserHistory.push(`/bundle/${id}`);
+  },
+
   renderBundles() {
     return this.state.rows.map((row, idx) => {
       return (
         <div
           key={idx}
           className='row'
+          onClick={this.handleClickBundle.bind(null, row.id)}
         >
           <div
-            className='entry'
+            className='entry id'
           >
             {row.id}
           </div>
           <div
             className='entry'
           >
-            <Link
-              to={`/bundle/${row.id}`}
-            >
-              {row.description}
-            </Link>
+            {row.description}
           </div>
         </div>
       );
@@ -50,15 +51,17 @@ BundleListTable = React.createClass({
     return this.state.isLoaded ?
       (
         <div>
-          <div>
-            {`Restaurant name: ${this.state.restaurantName}`}
-          </div>
-          <div>
-            {`Restaurant ID: ${this.props.params.id}`}
-          </div>
-          <div>
-            {`Number of bundles: ${this.state.numItems}`}
-          </div>
+          <InfoPanel>
+            <div
+              className='restaurant-name'
+            >
+              {this.state.restaurantName}
+            </div>
+            <NumOfItems
+              name='BUNDLES'
+              numItems={this.state.numItems}
+            />
+          </InfoPanel>
           <div
             className='table'
           >
