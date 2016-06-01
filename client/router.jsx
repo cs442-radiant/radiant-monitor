@@ -22,7 +22,19 @@ const Routes = React.createClass({
           component={App}
         >
           <IndexRoute
+            component={Home}
+          />
+          <Route
+            path='restaurant'
             component={RestaurantTable}
+          />
+          <Route
+            path='restaurant/:id'
+            component={BundleListTable}
+          />
+          <Route
+            path='bundle/:id'
+            component={BundleTable}
           />
         </Route>
       </Router>

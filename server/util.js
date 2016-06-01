@@ -45,7 +45,6 @@ Util = {
           }
         });
       } else {
-        Logger.info('DB ping: OK');
         callback();
       }
     });

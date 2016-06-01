@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-RestaurantTable = React.createClass({
+BundleListTable = React.createClass({
   getInitialState() {
     return {
       isLoaded: false
@@ -10,16 +10,17 @@ RestaurantTable = React.createClass({
   componentWillMount() {
     var self = this;
 
-    Meteor.call('getRestaurants', 0, 100, true, (err, result) => {
+    Meteor.call('getBundles', this.props.params.id, 0, 100, true, (err, result) => {
       self.setState({
         rows: result.payload,
         numItems: result.numItems,
-        isLoaded: true
+        isLoaded: true,
+        restaurantName: result.restaurantName
       });
     });
   },
 
-  renderRestaurants() {
+  renderBundles() {
     return this.state.rows.map((row, idx) => {
       return (
         <div
@@ -35,9 +36,9 @@ RestaurantTable = React.createClass({
             className='entry'
           >
             <Link
-              to={`/restaurant/${row.id}`}
+              to={`/bundle/${row.id}`}
             >
-              {row.name}
+              {row.description}
             </Link>
           </div>
         </div>
@@ -50,12 +51,18 @@ RestaurantTable = React.createClass({
       (
         <div>
           <div>
-            {`Number of restaurants: ${this.state.numItems}`}
+            {`Restaurant name: ${this.state.restaurantName}`}
+          </div>
+          <div>
+            {`Restaurant ID: ${this.props.params.id}`}
+          </div>
+          <div>
+            {`Number of bundles: ${this.state.numItems}`}
           </div>
           <div
             className='table'
           >
-            {this.renderRestaurants()}
+            {this.renderBundles()}
           </div>
         </div>
       ) :

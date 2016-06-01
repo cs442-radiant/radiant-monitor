@@ -4,6 +4,7 @@ AppLayout = React.createClass({
       <div
         className='layout'
       >
+        <Header />
         {this.props.children}
       </div>
     );

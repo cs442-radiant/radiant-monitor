@@ -1,0 +1,65 @@
+@teal: #07889b;
+@white: #ffffff;
+@tangerine: #e37222;
+@dusty: #96858f;
+@lavendar: #6d7993;
+@overcast: #9099a2;
+@paper: #d5d5d5;
+@black: #000000;
+
+body {
+  font-family: 'Open Sans', 'Nanum Gothic', sans-serif;
+  font-size: 18px;
+  margin: 0;
+}
+
+.header {
+  font-family: 'Lato', sans-serif;
+  font-weight: 900;
+  font-size: 42px;
+  padding: 12px;
+  background-color: @dusty;
+  color: @white;
+}
+
+div.table {
+  display: table;
+
+  div.row {
+    display: table-row;
+
+    div.entry {
+      display: table-cell;
+      height: 100%;
+    }
+  }
+}
+
+div.sample-table {
+  div.column {
+    display: table;
+    float: left;
+    margin: 10px;
+    padding: 5px;
+    background-color: @paper;
+    border-radius: 9px;
+
+    div.ap {
+      display: table-row;
+      margin: 3px;
+      color: @black;
+
+      .ssid {
+        display: table-cell;
+      }
+
+      .bssid {
+        display: table-cell;
+      }
+
+      .level {
+        display: table-cell;
+      }
+    }
+  }
+}
