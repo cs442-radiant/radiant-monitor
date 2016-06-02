@@ -8,6 +8,8 @@
 @black: #000000;
 @blueberry: #6b7a8f;
 
+@table-header-text-color: #002627;
+
 @font-size-xsmall: 14px;
 @font-size-small: 16px;
 @font-size-medium: 18px;
@@ -62,57 +64,59 @@ a {
   padding: 30px;
 }
 
-.header {
-  background-color: @dusty;
-  padding: 12px;
+.layout {
+  & > .header {
+    background-color: @dusty;
+    padding: 12px;
 
-  .title {
-    display: inline-block;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    height: 60px;
-    line-height: 60px;
-    font-family: 'Cabin', sans-serif;
-    font-weight: 900;
-    font-size: 42px;
-    color: @white;
-    cursor: pointer;
-    //text-shadow: 1px 1px 2px #000000;
+    .title {
+      display: inline-block;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      height: 60px;
+      line-height: 60px;
+      font-family: 'Cabin', sans-serif;
+      font-weight: 900;
+      font-size: 42px;
+      color: @white;
+      cursor: pointer;
+      //text-shadow: 1px 1px 2px #000000;
 
-    @duration: 0.1s;
+      @duration: 0.1s;
 
-    border-bottom: solid 0;
+      border-bottom: solid 0;
 
-    -webkit-transition: color @duration, border @duration;
-    -moz-transition: color @duration, border @duration;
-    -ms-transition: color @duration, border @duration;
-    -o-transition: color @duration, border @duration;
-    transition: color @duration, border @duration;
+      -webkit-transition: color @duration, border @duration;
+      -moz-transition: color @duration, border @duration;
+      -ms-transition: color @duration, border @duration;
+      -o-transition: color @duration, border @duration;
+      transition: color @duration, border @duration;
 
-    &:hover {
-      border-bottom: solid 3px;
+      &:hover {
+        border-bottom: solid 3px;
+      }
+
+      &:active {
+        @active-color: @paper;
+
+        color: @active-color;
+        border-color: @active-color;
+      }
     }
 
-    &:active {
-      @active-color: @paper;
+    .links {
+      font-weight: 800;
+      font-size: @font-size-big;
+      color: @white;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      margin-left: 10px;
 
-      color: @active-color;
-      border-color: @active-color;
-    }
-  }
-
-  .links {
-    font-weight: 800;
-    font-size: @font-size-big;
-    color: @white;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-left: 10px;
-
-    .item {
-      margin-right: 60px;
-      .clickable;
+      .item {
+        margin-right: 60px;
+        .clickable;
+      }
     }
   }
 }
@@ -215,7 +219,7 @@ div.home {
   }
 }
 
-div.table {
+div.restaurant-table, div.bundle-table {
   display: table;
 
   div.row {
@@ -237,20 +241,27 @@ div.table {
   }
 }
 
+.bssid-text {
+  font-family: 'Roboto Mono', sans-serif;
+  font-size: @font-size-xsmall;
+  color: @blueberry;
+}
+
 div.sample-table {
   div.column {
     display: table;
     float: left;
-    margin: 30px 35px 45px 10px;
+    margin: 0 35px 75px 10px;
     padding-left: 5px;
     padding-right: 5px;
     background-color: @white;
     border-spacing: 8px;
 
     div.header {
+      padding: 7px 13px 7px 13px;
       position: relative;
       background-color: @paper;
-      color: #002627;
+      color: @table-header-text-color;
       font-weight: 500;
 
       .num-of-aps {
@@ -281,13 +292,59 @@ div.sample-table {
 
         .bssid {
           display: table-cell;
-          font-family: 'Roboto Mono', sans-serif;
-          font-size: @font-size-xsmall;
+          .bssid-text;
         }
 
         .level {
           display: table-cell;
         }
+      }
+    }
+  }
+}
+
+.section {
+  .name {
+    .clickable;
+
+    display: inline-block;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .content {
+    &.folded {
+      display: none;
+    }
+  }
+}
+
+.statistics {
+  .table {
+    width: 100%;
+    display: table;
+
+    .row {
+      line-height: 35px;
+      text-align: center;
+
+      &.header {
+        display: table-row;
+        background-color: @paper;
+        color: @table-header-text-color;
+        font-weight: 700;
+      }
+
+      &.content {
+        display: table-row;
+
+        .no-ssid {
+          color: @overcast;
+        }
+      }
+
+      div {
+        display: table-cell;
       }
     }
   }
@@ -305,8 +362,6 @@ div.sample-table {
 
 .sk-fading-circle {
   margin: 100px auto;
-  width: 120px;
-  height: 120px;
   position: relative;
 }
 

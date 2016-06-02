@@ -63,7 +63,7 @@ BundleListTable = React.createClass({
             />
           </InfoPanel>
           <div
-            className='table'
+            className='bundle-table'
           >
             {this.renderBundles()}
           </div>

@@ -1,7 +1,25 @@
 Loader = React.createClass({
+  propTypes: {
+    size: React.PropTypes.number
+  },
+
+  getDefaultProps() {
+    return {
+      size: 80
+    };
+  },
+
   render() {
+    const style = {
+      width: `${this.props.size}px`,
+      height: `${this.props.size}px`
+    };
+
     return (
-      <div className='sk-fading-circle'>
+      <div
+        style={style}
+        className='sk-fading-circle'
+      >
         <div className='sk-circle1 sk-circle' />
         <div className='sk-circle2 sk-circle' />
         <div className='sk-circle3 sk-circle' />
