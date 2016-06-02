@@ -8,4 +8,4 @@
 5. Check http://localhost:3000/
 
 ## Production
-Currently running on [Google Compute Engine instance](http://104.199.139.91:3000/)
+http://teamradiant.site/
