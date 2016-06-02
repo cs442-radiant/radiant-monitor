@@ -6,27 +6,54 @@ Header = React.createClass({
   },
 
   render() {
+    const isFullscreen = this.props.currentPath === '/';
+
     return (
       <div
-        className='header'
+        className={`header ${isFullscreen ? 'fullscreen' : ''}`}
       >
         <div
-          className='title'
-          onClick={this.handleClickTitle}
+          className='hide-overflow'
         >
-          RADIANT MONITOR
+          <div
+            className='black-layer'
+          />
         </div>
         <div
-          className='links'
+          className='height-maximizer'
         >
-          <Header.Item
-            to='/restaurant'
-            name='SHOW RESTAURANTS'
-          />
-          <Header.Item
-            to='/about'
-            name='ABOUT US'
-          />
+          <div
+            className='title'
+            onClick={this.handleClickTitle}
+          >
+            TEAM RADIANT
+          </div>
+          <div
+            className='no-title'
+          >
+            <div
+              className='text'
+            >
+              <div>
+                We're researching Wi-Fi localization and this is our monitor web page for data analysis.
+              </div>
+              <div>
+                Please feel free to look around!
+              </div>
+            </div>
+            <div
+              className='links'
+            >
+              <Header.Item
+                to='/restaurant'
+                name='DATABASE'
+              />
+              <Header.Item
+                to='/about'
+                name='ABOUT US'
+              />
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -25,6 +25,18 @@ Functions
   transform: translateY(-50%);
 }
 
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s linear;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.2s, opacity 0.2s linear;
+}
+
 .clickable {
   @duration: 0.1s;
 
@@ -61,37 +73,108 @@ a {
 }
 
 .content {
+  position: relative;
   padding: 30px;
 }
 
 .layout {
   & > .header {
-    background-color: @dusty;
-    padding: 12px;
+    @height-animation-duration: 1s;
+
+    position: relative;
+    background-size: cover;
+    background-image: url("/images/new-york-748595_1920.jpg");
+    max-height: 200px;
+    text-align: center;
+    z-index: 0;
+    overflow: hidden;
+
+    -webkit-transition: max-height @height-animation-duration;
+    -moz-transition: max-height @height-animation-duration;
+    -ms-transition: max-height @height-animation-duration;
+    -o-transition: max-height @height-animation-duration;
+    transition: max-height @height-animation-duration;
+
+    &.fullscreen {
+      max-height: 100vh;
+
+      .no-title {
+        .visible;
+      }
+
+      .title {
+        margin-top: 120px;
+      }
+    }
+
+    &:not(.fullscreen) {
+      .no-title {
+        .hidden;
+      }
+
+      .title {
+        margin-top: 60px;
+      }
+
+      .black-layer {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    .height-maximizer {
+      position: relative;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .hide-overflow {
+      overflow: hidden;
+    }
+
+    .black-layer {
+      position: absolute;
+      width: 100%;
+      height: inherit;
+      z-index: 5;
+      background-color: rgba(0, 0, 0, 0.3);
+      top: 0;
+      right: 0;
+      bottom: 0;
+
+      -webkit-transition: background-color @height-animation-duration;
+      -moz-transition: background-color @height-animation-duration;
+      -ms-transition: background-color @height-animation-duration;
+      -o-transition: background-color @height-animation-duration;
+      transition: background-color @height-animation-duration;
+    }
 
     .title {
+      margin-bottom: 30px;
       display: inline-block;
       box-sizing: border-box;
       -moz-box-sizing: border-box;
       -webkit-box-sizing: border-box;
       height: 60px;
       line-height: 60px;
-      font-family: 'Cabin', sans-serif;
-      font-weight: 900;
-      font-size: 42px;
+      font-family: 'Allerta Stencil', sans-serif;
+      font-weight: 200;
+      font-size: 44px;
+      letter-spacing: 0.20em;
       color: @white;
       cursor: pointer;
+      text-align: center;
+      z-index: 1;
       //text-shadow: 1px 1px 2px #000000;
 
       @duration: 0.1s;
 
-      border-bottom: solid 0;
+      border-bottom: solid 3px @tangerine;
 
-      -webkit-transition: color @duration, border @duration;
-      -moz-transition: color @duration, border @duration;
-      -ms-transition: color @duration, border @duration;
-      -o-transition: color @duration, border @duration;
-      transition: color @duration, border @duration;
+      -webkit-transition: margin-top @height-animation-duration, color @duration, border @duration;
+      -moz-transition: margin-top @height-animation-duration, color @duration, border @duration;
+      -ms-transition: margin-top @height-animation-duration, color @duration, border @duration;
+      -o-transition: margin-top @height-animation-duration, color @duration, border @duration;
+      transition: margin-top @height-animation-duration, color @duration, border @duration;
 
       &:hover {
         border-bottom: solid 3px;
@@ -105,16 +188,24 @@ a {
       }
     }
 
+    .text {
+      color: @white;
+      opacity: 0.8;
+      font-weight: 700;
+      font-size: @font-size-small;
+      margin-bottom: 80px;
+    }
+
     .links {
       font-weight: 800;
       font-size: @font-size-big;
       color: @white;
       padding-top: 20px;
       padding-bottom: 20px;
-      margin-left: 10px;
 
       .item {
-        margin-right: 60px;
+        margin-left: 20px;
+        margin-right: 20px;
         .clickable;
       }
     }
@@ -247,11 +338,29 @@ div.restaurant-table, div.bundle-table {
   color: @blueberry;
 }
 
+.count-of-appearance {
+  position: relative;
+
+  & > .appearance-ratio {
+    position: absolute;
+    left: 50%;
+    margin-left: 5px;
+    font-size: @font-size-xsmall;
+    color: @blueberry;
+  }
+
+  & > .appearance-count {
+    position: absolute;
+    right: 50%;
+    text-align: right;
+  }
+}
+
 div.sample-table {
   div.column {
-    display: table;
-    float: left;
-    margin: 0 35px 75px 10px;
+    width: 40%;
+    display: inline-block;
+    margin: 0 5% 70px 0;
     padding-left: 5px;
     padding-right: 5px;
     background-color: @white;
@@ -274,7 +383,10 @@ div.sample-table {
     }
 
     div.ap-list {
-      border-left: solid 5px @paper;
+      width: 100%;
+      display: table;
+      background-color: #f8f8f8;
+      //border-left: solid 5px @paper;
 
       div.ap {
         display: table-row;
