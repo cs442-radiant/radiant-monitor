@@ -57,7 +57,7 @@ RestaurantTable = React.createClass({
             />
           </InfoPanel>
           <div
-            className='table'
+            className='restaurant-table'
           >
             {this.renderRestaurants()}
           </div>

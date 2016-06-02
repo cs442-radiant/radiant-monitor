@@ -8,10 +8,60 @@ BundleTable = React.createClass({
     };
   },
 
+  computeStatistics(payload) {
+    let rows = payload ? payload : this.state.rows;
+    let aps = {};
+
+    rows.forEach((row) => {
+      row.sample.forEach((sample) => {
+        const BSSID = sample.BSSID;
+
+        if (!aps[BSSID]) {
+          aps[BSSID] = {};
+          aps[BSSID].SSID = sample.SSID;
+          aps[BSSID].sum = 0;
+          aps[BSSID].count = 0;
+        }
+
+        aps[BSSID].count++;
+        aps[BSSID].sum += sample.level;
+      });
+    });
+
+    let result = [];
+
+    Object.keys(aps).map((BSSID) => {
+      const ap = aps[BSSID];
+
+      ap.BSSID = BSSID;
+      ap.averageLevel = (ap.sum / ap.count);
+      delete ap.sum;
+
+      result.push(ap);
+    });
+
+    result.sort((ap1, ap2) => {
+      return ap2.averageLevel - ap1.averageLevel;
+    });
+
+    this.setState({
+      aps: result
+    });
+  },
+
   componentWillMount() {
     var self = this;
 
     Meteor.call('getSamples', this.props.params.id, 0, 100, true, (err, result) => {
+      result.payload = result.payload.map((row) => {
+        let result = row;
+        result.sample = JSON.parse(row.sample);
+
+        return result;
+      });
+
+      this.computeStatistics(result.payload);
+
       self.setState({
         rows: result.payload,
         numItems: result.numItems,
@@ -67,7 +117,7 @@ BundleTable = React.createClass({
 
   renderSamples() {
     return this.state.rows.map((row, idx) => {
-      const apList = JSON.parse(row.sample);
+      const apList = row.sample;
 
       return (
         <div
@@ -134,13 +184,89 @@ BundleTable = React.createClass({
               numItems={this.state.numItems}
             />
           </InfoPanel>
-          <div
-            className='sample-table'
+          <Section
+            name='STATISTICS'
           >
-            {this.renderSamples()}
-          </div>
+            {this.state.aps ?
+              <BundleTable.Statistics
+                rows={this.state.aps}
+              /> : <Loader />}
+          </Section>
+          <Section
+            name='SAMPLES'
+          >
+            <div
+              className='sample-table'
+            >
+              {this.renderSamples()}
+            </div>
+          </Section>
         </div>
       ) :
       <Loader />;
+  }
+});
+
+BundleTable.Statistics = React.createClass({
+  propTypes: {
+    rows: React.PropTypes.array.isRequired
+  },
+
+  renderRows() {
+    return this.props.rows.map((row, idx) => {
+      return (
+        <div
+          key={idx}
+          className='content row'
+        >
+          <div
+            className={`ssid ${row.SSID ? '' : 'no-ssid'}`}
+          >
+            {row.SSID ? row.SSID : '(NO SSID)'}
+          </div>
+          <div
+            className='bssid-text'
+          >
+            {row.BSSID}
+          </div>
+          <div>
+            {row.averageLevel.toFixed(2)}
+          </div>
+          <div>
+            {row.count}
+          </div>
+        </div>
+      );
+    });
+  },
+
+  render() {
+    return (
+      <div
+        className='statistics'
+      >
+        <div
+          className='table'
+        >
+          <div
+            className='header row'
+          >
+            <div>
+              SSID
+            </div>
+            <div>
+              BSSID
+            </div>
+            <div>
+              AVERAGE LEVEL
+            </div>
+            <div>
+              COUNT OF APPEARANCE
+            </div>
+          </div>
+          {this.renderRows()}
+        </div>
+      </div>
+    );
   }
 });
