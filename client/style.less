@@ -72,28 +72,50 @@ a {
   color: inherit;
 }
 
-.content {
-  position: relative;
-  padding: 30px;
-}
-
 .layout {
-  & > .header {
-    @height-animation-duration: 1s;
+  @height-animation-duration: 1s;
+  @top-line-position: 200px;
 
+  & > .content {
+    box-sizing: border-box;
+    padding: 30px;
+    width: 100%;
+    height: inherit;
+    position: absolute;
+    top: @top-line-position;
+    background-color: @white;
+
+    -webkit-transition: height @height-animation-duration, top @height-animation-duration;
+    -moz-transition: height @height-animation-duration, top @height-animation-duration;
+    -ms-transition: height @height-animation-duration, top @height-animation-duration;
+    -o-transition: height @height-animation-duration, top @height-animation-duration;
+    transition: height @height-animation-duration, top @height-animation-duration;
+
+    & > .design-by {
+      position: absolute;
+      right: 7px;
+      top: -30px;
+      color: @white;
+      opacity: 0.7;
+      font-size: @font-size-small;
+    }
+  }
+
+  &.fullscreen {
+    & > .content {
+      padding: 0;
+      height: 0;
+      top: 100vh;
+    }
+  }
+
+  & > .header {
     position: relative;
     background-size: cover;
     background-image: url("/images/new-york-748595_1920.jpg");
-    max-height: 200px;
     text-align: center;
     z-index: 0;
     overflow: hidden;
-
-    -webkit-transition: max-height @height-animation-duration;
-    -moz-transition: max-height @height-animation-duration;
-    -ms-transition: max-height @height-animation-duration;
-    -o-transition: max-height @height-animation-duration;
-    transition: max-height @height-animation-duration;
 
     &.fullscreen {
       max-height: 100vh;
@@ -119,12 +141,31 @@ a {
       .black-layer {
         background-color: rgba(0, 0, 0, 0.6);
       }
+
+      .filler {
+        top: @top-line-position;
+      }
     }
 
     .height-maximizer {
       position: relative;
       height: 100vh;
       z-index: 10;
+    }
+
+    &>.filler {
+      position: absolute;
+      top: 100%;
+      bottom: 0;
+      width: 100%;
+      z-index: 15;
+      background-color: @white;
+
+      -webkit-transition: top @height-animation-duration;
+      -moz-transition: top @height-animation-duration;
+      -ms-transition: top @height-animation-duration;
+      -o-transition: top @height-animation-duration;
+      transition: top @height-animation-duration;
     }
 
     .hide-overflow {
