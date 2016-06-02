@@ -20,20 +20,21 @@ AppLayout = React.createClass({
 
     return (
       <div
-        className='layout'
+        className={`layout ${isFullscreen ? 'fullscreen' : ''}`}
       >
         <Header
           currentPath={this.state.currentPath}
         />
-        {
-          isFullscreen ?
-            null :
-            <div
-              className='content'
-            >
-              {this.props.children}
-            </div>
-        }
+        <div
+          className='content'
+        >
+          <div
+            className='design-by'
+          >
+            WEB DESIGN BY DEL
+          </div>
+          {this.props.children}
+        </div>
       </div>
     );
   }

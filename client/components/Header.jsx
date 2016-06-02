@@ -55,6 +55,9 @@ Header = React.createClass({
             </div>
           </div>
         </div>
+        <div
+          className='filler'
+        />
       </div>
     );
   }
