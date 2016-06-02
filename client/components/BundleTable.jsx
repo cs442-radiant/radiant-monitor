@@ -190,6 +190,7 @@ BundleTable = React.createClass({
             {this.state.aps ?
               <BundleTable.Statistics
                 rows={this.state.aps}
+                numTotalSamples={this.state.numItems}
               /> : <Loader />}
           </Section>
           <Section
@@ -209,10 +210,13 @@ BundleTable = React.createClass({
 
 BundleTable.Statistics = React.createClass({
   propTypes: {
-    rows: React.PropTypes.array.isRequired
+    rows: React.PropTypes.array.isRequired,
+    numTotalSamples: React.PropTypes.number.isRequired
   },
 
   renderRows() {
+    var self = this;
+
     return this.props.rows.map((row, idx) => {
       return (
         <div
@@ -232,8 +236,19 @@ BundleTable.Statistics = React.createClass({
           <div>
             {row.averageLevel.toFixed(2)}
           </div>
-          <div>
-            {row.count}
+          <div
+            className='count-of-appearance'
+          >
+            <span
+              className='appearance-count'
+            >
+              {row.count}
+            </span>
+            <span
+              className='appearance-ratio'
+            >
+              {`(${(row.count / self.props.numTotalSamples * 100).toFixed(1)}%)`}
+            </span>
           </div>
         </div>
       );
