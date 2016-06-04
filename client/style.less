@@ -503,6 +503,70 @@ div.sample-table {
   }
 }
 
+div#google-map {
+  height: 500px;
+}
+
+.animation(@arguments) {
+  -webkit-animation: @arguments;
+  -moz-animation: @arguments;
+  animation: @arguments;
+}
+
+.transition(@arguments) {
+  -webkit-transition: @arguments;
+  -moz-transition: @arguments;
+  -ms-transition: @arguments;
+  -o-transition: @arguments;
+  transition: @arguments;
+}
+
+.map-marker-container {
+  position: absolute;
+
+  & > .map-marker {
+    @transition-duration: 0.3s;
+    @royal-blue: #002366;
+
+    position: absolute;
+    background-color: fade(@royal-blue, 40%);
+    cursor: pointer;
+    z-index: 9;
+
+    .transition(all @transition-duration);
+
+    & > .text {
+      position: absolute;
+      width: 500px;
+      text-align: center;
+      font-size: 7px;
+      color: @white;
+      font-weight: 700;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: default;
+      text-decoration: none;
+      pointer-events: none;
+
+      .transition(opacity @transition-duration);
+
+      &.hidden {
+        opacity: 0;
+      }
+    }
+
+    &.hover {
+      background-color: fade(@royal-blue, 84%);
+      z-index: 10;
+    }
+
+    &:active {
+      background-color: fade(@royal-blue, 98%);
+    }
+  }
+}
+
 .num-of-items {
   color: @lavendar;
   font-size: @font-size-small;

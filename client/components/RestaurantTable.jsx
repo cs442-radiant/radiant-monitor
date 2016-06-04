@@ -34,12 +34,12 @@ RestaurantTable = React.createClass({
           <div
             className='entry id'
           >
-            {row.id}
+            {idx + 1}
           </div>
           <div
             className='entry'
           >
-            {row.name}
+            {row.displayName || row.name}
           </div>
         </div>
       );
@@ -50,6 +50,9 @@ RestaurantTable = React.createClass({
     return this.state.isLoaded ?
       (
         <div>
+          <Map
+            restaurants={this.state.rows}
+          />
           <InfoPanel>
             <NumOfItems
               name='RESTAURANTS'
