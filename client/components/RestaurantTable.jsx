@@ -1,30 +1,24 @@
 import { browserHistory } from 'react-router';
 
 RestaurantTable = React.createClass({
-  getInitialState() {
+  propTypes: {
+    rows: React.PropTypes.array,
+    numItems: React.PropTypes.number,
+    isLoaded: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
     return {
       isLoaded: false
     };
   },
 
-  componentWillMount() {
-    var self = this;
-
-    Meteor.call('getRestaurants', 0, 100, true, (err, result) => {
-      self.setState({
-        rows: result.payload,
-        numItems: result.numItems,
-        isLoaded: true
-      });
-    });
-  },
-
   handleClickRestaurant(id) {
-    browserHistory.push(`/restaurant/${id}`);
+    browserHistory.push(`/database/restaurant/${id}`);
   },
 
   renderRestaurants() {
-    return this.state.rows.map((row, idx) => {
+    return this.props.rows.map((row, idx) => {
       return (
         <div
           key={idx}
@@ -47,16 +41,13 @@ RestaurantTable = React.createClass({
   },
 
   render() {
-    return this.state.isLoaded ?
+    return this.props.isLoaded ?
       (
         <div>
-          <Map
-            restaurants={this.state.rows}
-          />
           <InfoPanel>
             <NumOfItems
               name='RESTAURANTS'
-              numItems={this.state.numItems}
+              numItems={this.props.numItems}
             />
           </InfoPanel>
           <div

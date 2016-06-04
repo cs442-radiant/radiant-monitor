@@ -80,7 +80,7 @@ BundleTable = React.createClass({
 
   handleClickRestaurantName() {
     if (this.state.bundle) {
-      browserHistory.push(`/restaurant/${this.state.bundle.restaurantId}`);
+      browserHistory.push(`/database/restaurant/${this.state.bundle.restaurantId}`);
     }
   },
 

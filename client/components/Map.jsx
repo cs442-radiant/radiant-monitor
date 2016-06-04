@@ -1,3 +1,5 @@
+import { browserHistory } from 'react-router';
+
 function fromLatLngToPoint(latLng, map) {
   var topRight = map.getProjection().fromLatLngToPoint(map.getBounds().getNorthEast());
   var bottomLeft = map.getProjection().fromLatLngToPoint(map.getBounds().getSouthWest());
@@ -71,6 +73,7 @@ Map = React.createClass({
         return (
           <Map.Marker
             key={idx}
+            restaurantId={row.id}
             x={point.x}
             y={point.y}
             name={row.name}
@@ -100,6 +103,7 @@ Map = React.createClass({
 
 Map.Marker = React.createClass({
   propTypes: {
+    restaurantId: React.PropTypes.number.isRequired,
     x: React.PropTypes.number.isRequired,
     y: React.PropTypes.number.isRequired,
     name: React.PropTypes.string.isRequired,
@@ -122,6 +126,10 @@ Map.Marker = React.createClass({
     this.setState({
       hover: false
     });
+  },
+
+  handleOnClick() {
+    browserHistory.push(`/database/restaurant/${this.props.restaurantId}`);
   },
 
   render() {
@@ -153,6 +161,7 @@ Map.Marker = React.createClass({
           style={style.circle}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
+          onClick={this.handleOnClick}
         >
           <span
             className={`text ${this.state.hover ? '' : 'hidden'}`}

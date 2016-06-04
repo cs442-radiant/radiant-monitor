@@ -25,17 +25,21 @@ const Routes = React.createClass({
             component={Home}
           />
           <Route
-            path='restaurant'
-            component={RestaurantTable}
-          />
-          <Route
-            path='restaurant/:id'
-            component={BundleListTable}
-          />
-          <Route
-            path='bundle/:id'
-            component={BundleTable}
-          />
+            path='database'
+            component={Database}
+          >
+            <IndexRoute
+              component={RestaurantTable}
+            />
+            <Route
+              path='restaurant/:id'
+              component={BundleListTable}
+            />
+            <Route
+              path='bundle/:id'
+              component={BundleTable}
+            />
+          </Route>
           <Route
             path='about'
             component={AboutUs}
