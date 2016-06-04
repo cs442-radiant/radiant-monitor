@@ -15,7 +15,8 @@ Map = React.createClass({
 
   getInitialState() {
     return {
-      isMapReady: false
+      isMapReady: false,
+      selectedId: null
     };
   },
 
@@ -58,6 +59,12 @@ Map = React.createClass({
     });
   },
 
+  handleOnSelectMarker(id) {
+    this.setState({
+      selectedId: id
+    });
+  },
+
   renderMarkers() {
     if (this.state.isMapReady) {
       return this.props.restaurants.map((row, idx) => {
@@ -78,6 +85,8 @@ Map = React.createClass({
             y={point.y}
             name={row.name}
             hidden={hidden}
+            selected={this.state.selectedId === row.id}
+            onSelect={this.handleOnSelectMarker.bind(null, row.id)}
           />
         );
       });
@@ -107,7 +116,16 @@ Map.Marker = React.createClass({
     x: React.PropTypes.number.isRequired,
     y: React.PropTypes.number.isRequired,
     name: React.PropTypes.string.isRequired,
-    hidden: React.PropTypes.bool
+    hidden: React.PropTypes.bool,
+    selected: React.PropTypes.bool,
+    onSelect: React.PropTypes.func
+  },
+
+  getDefaultProps() {
+    return {
+      hidden: false,
+      selected: false
+    };
   },
 
   getInitialState() {
@@ -130,6 +148,9 @@ Map.Marker = React.createClass({
 
   handleOnClick() {
     browserHistory.push(`/database/restaurant/${this.props.restaurantId}`);
+    if (this.props.onSelect) {
+      this.props.onSelect();
+    }
   },
 
   render() {
@@ -157,7 +178,7 @@ Map.Marker = React.createClass({
         style={style.container}
       >
         <div
-          className={`map-marker ${this.state.hover ? 'hover' : ''}`}
+          className={`map-marker ${this.state.hover ? 'hover' : ''} ${this.props.selected ? 'selected' : ''}`}
           style={style.circle}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}

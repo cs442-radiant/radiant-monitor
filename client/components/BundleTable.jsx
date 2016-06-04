@@ -1,11 +1,24 @@
 import { browserHistory } from 'react-router';
 
 BundleTable = React.createClass({
+  propTypes: {
+    onLoad: React.PropTypes.func
+  },
+
   getInitialState() {
     return {
-      isSamplesLoaded: false,
-      isRestaurantNameLoaded: false
+      isSamplesLoaded: false
     };
+  },
+
+  componentWillMount() {
+    this.loadSamples(this.props.params.bundleid);
+  },
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.params.bundleid != this.props.params.bundleid) {
+      this.loadSamples(nextProps.params.bundleid);
+    }
   },
 
   computeStatistics(payload) {
@@ -49,10 +62,14 @@ BundleTable = React.createClass({
     });
   },
 
-  componentWillMount() {
+  loadSamples(bundleId) {
     var self = this;
 
-    Meteor.call('getSamples', this.props.params.id, 0, 100, true, (err, result) => {
+    self.setState({
+      isSamplesLoaded: false
+    });
+
+    Meteor.call('getSamples', bundleId, 0, 100, true, (err, result) => {
       result.payload = result.payload.map((row) => {
         let result = row;
         result.sample = JSON.parse(row.sample);
@@ -69,19 +86,10 @@ BundleTable = React.createClass({
         isSamplesLoaded: true
       });
 
-      Meteor.call('getRestaurant', result.bundle.restaurantId, (err, result) => {
-        self.setState({
-          restaurantName: result.name,
-          isRestaurantNameLoaded: true
-        });
-      });
+      if (self.props.onLoad) {
+        self.props.onLoad();
+      }
     });
-  },
-
-  handleClickRestaurantName() {
-    if (this.state.bundle) {
-      browserHistory.push(`/database/restaurant/${this.state.bundle.restaurantId}`);
-    }
   },
 
   renderAPs(sample) {
@@ -152,12 +160,6 @@ BundleTable = React.createClass({
         <div>
           <InfoPanel>
             <div
-              className='restaurant-name inline clickable'
-              onClick={this.handleClickRestaurantName}
-            >
-              {this.state.isRestaurantNameLoaded ? this.state.restaurantName : ''}
-            </div>
-            <div
               className='bundle'
             >
               <span>
@@ -176,7 +178,7 @@ BundleTable = React.createClass({
               <span
                 className='bundle-id'
               >
-                {`(Bundle ID: ${this.props.params.id})`}
+                {`(Bundle ID: ${this.props.params.bundleid})`}
               </span>
             </div>
             <NumOfItems

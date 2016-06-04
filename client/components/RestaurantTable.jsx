@@ -26,14 +26,18 @@ RestaurantTable = React.createClass({
           onClick={this.handleClickRestaurant.bind(null, row.id)}
         >
           <div
-            className='entry id'
+            className='row-content'
           >
-            {idx + 1}
-          </div>
-          <div
-            className='entry'
-          >
-            {row.displayName || row.name}
+            <div
+              className='entry id'
+            >
+              {idx + 1}
+            </div>
+            <div
+              className='entry'
+            >
+              {row.displayName || row.name}
+            </div>
           </div>
         </div>
       );

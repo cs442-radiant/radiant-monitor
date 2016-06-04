@@ -352,23 +352,52 @@ div.home {
 }
 
 div.restaurant-table, div.bundle-table {
-  display: table;
-
   div.row {
-    display: table-row;
-    line-height: 35px;
-    .clickable;
+    display: table;
+    position: relative;
 
-    div.entry {
-      display: table-cell;
-      height: 100%;
+    & > .row-content {
+      display: table-row;
+      line-height: 35px;
+      .clickable;
 
-      &.id {
-        font-size: @font-size-small;
-        color: @overcast;
-        text-align: center;
-        width: 50px;
+      div.entry {
+        display: table-cell;
+        height: 100%;
+
+        &.id {
+          font-size: @font-size-small;
+          color: @overcast;
+          text-align: center;
+          width: 50px;
+        }
       }
+
+      :last-child {
+        padding-right: 20px;
+      }
+    }
+
+    &.selected {
+      .entry {
+        background-color: fade(@tangerine, 30%);
+
+        &.id {
+          color: darken(@tangerine, 20%);
+        }
+
+        &.name {
+          color: darken(@tangerine, 5%);
+        }
+      }
+    }
+
+    & > .loader {
+      position: absolute;
+      right: -25px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
     }
   }
 }
@@ -564,6 +593,10 @@ div#google-map {
     &:active {
       background-color: fade(@royal-blue, 98%);
     }
+
+    &.selected {
+      background-color: fade(@tangerine, 90%);
+    }
   }
 }
 
@@ -578,7 +611,7 @@ div#google-map {
 }
 
 .sk-fading-circle {
-  margin: 100px auto;
+  margin: auto auto;
   position: relative;
 }
 
