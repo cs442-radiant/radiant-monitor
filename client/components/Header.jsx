@@ -45,7 +45,7 @@ Header = React.createClass({
               className='links'
             >
               <Header.Item
-                to='/restaurant'
+                to='/database'
                 name='DATABASE'
               />
               <Header.Item

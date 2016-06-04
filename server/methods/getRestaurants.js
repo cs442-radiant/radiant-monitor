@@ -21,7 +21,7 @@ Meteor.methods({
     let countFuture = new Future();
     let response = {};
 
-    DB.query(`SELECT * FROM Restaurant LIMIT ${offset}, ${limit}`, (err, rows, fields) => {
+    DB.query(`SELECT * FROM Restaurant WHERE hidden=0 LIMIT ${offset}, ${limit}`, (err, rows, fields) => {
       if (err) {
         throw new Meteor.Error(500, 'Error occured executing SQL query: ' + err);
       }
@@ -30,7 +30,7 @@ Meteor.methods({
     });
 
     if (needCount) {
-      DB.query(`SELECT COUNT(*) FROM Restaurant`, (err, rows, fields) => {
+      DB.query(`SELECT COUNT(*) FROM Restaurant WHERE hidden=0`, (err, rows, fields) => {
         countFuture['return'](rows[0]['COUNT(*)']);
       });
 

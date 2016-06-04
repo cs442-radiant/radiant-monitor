@@ -8,9 +8,21 @@ BundleListTable = React.createClass({
   },
 
   componentWillMount() {
+    this.loadBundles(this.props.params.id);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.loadBundles(nextProps.params.id);
+  },
+
+  loadBundles(restaurantId) {
     var self = this;
 
-    Meteor.call('getBundles', this.props.params.id, 0, 100, true, (err, result) => {
+    self.setState({
+      isLoaded: false
+    });
+
+    Meteor.call('getBundles', restaurantId, 0, 100, true, (err, result) => {
       self.setState({
         rows: result.payload,
         numItems: result.numItems,
@@ -21,7 +33,7 @@ BundleListTable = React.createClass({
   },
 
   handleClickBundle(id) {
-    browserHistory.push(`/bundle/${id}`);
+    browserHistory.push(`/database/bundle/${id}`);
   },
 
   renderBundles() {
