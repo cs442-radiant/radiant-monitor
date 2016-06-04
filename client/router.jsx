@@ -34,11 +34,12 @@ const Routes = React.createClass({
             <Route
               path='restaurant/:id'
               component={BundleListTable}
-            />
-            <Route
-              path='bundle/:id'
-              component={BundleTable}
-            />
+            >
+              <Route
+                path='bundle/:bundleid'
+                component={BundleTable}
+              />
+            </Route>
           </Route>
           <Route
             path='about'

@@ -1,18 +1,22 @@
 Loader = React.createClass({
   propTypes: {
-    size: React.PropTypes.number
+    size: React.PropTypes.number,
+    margin: React.PropTypes.number
   },
 
   getDefaultProps() {
     return {
-      size: 80
+      size: 80,
+      margin: 100
     };
   },
 
   render() {
     const style = {
       width: `${this.props.size}px`,
-      height: `${this.props.size}px`
+      height: `${this.props.size}px`,
+      marginTop: `${this.props.margin}px`,
+      marginBottom: `${this.props.margin}`
     };
 
     return (
