@@ -1,13 +1,17 @@
 Loader = React.createClass({
   propTypes: {
     size: React.PropTypes.number,
-    margin: React.PropTypes.number
+    margin: React.PropTypes.number,
+    marginOnly: React.PropTypes.bool,
+    margin100vh: React.PropTypes.bool
   },
 
   getDefaultProps() {
     return {
       size: 80,
-      margin: 100
+      margin: 100,
+      marginOnly: false,
+      margin100vh: false
     };
   },
 
@@ -15,9 +19,17 @@ Loader = React.createClass({
     const style = {
       width: `${this.props.size}px`,
       height: `${this.props.size}px`,
-      marginTop: `${this.props.margin}px`,
-      marginBottom: `${this.props.margin}`
+      marginTop: this.props.margin100vh ? '100vh' : `${this.props.margin}px`,
+      marginBottom: this.props.margin100vh ? 0 : `${this.props.margin}px`
     };
+
+    if (this.props.marginOnly) {
+      return (
+        <div
+          style={style}
+        />
+      );
+    }
 
     return (
       <div

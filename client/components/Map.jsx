@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router';
 
+GoogleMapLoaded = false;
+
 function fromLatLngToPoint(latLng, map) {
   var topRight = map.getProjection().fromLatLngToPoint(map.getBounds().getNorthEast());
   var bottomLeft = map.getProjection().fromLatLngToPoint(map.getBounds().getSouthWest());
@@ -15,17 +17,21 @@ Map = React.createClass({
 
   getInitialState() {
     return {
-      isMapReady: false,
-      selectedId: null
+      isMapReady: false
     };
   },
 
   componentDidMount() {
-    let scriptTag = document.createElement('script');
-    scriptTag.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9LEFx4-NkNFr-WnbVP-DnIVAndzSF04');
-    scriptTag.onload = this.handleScriptOnLoad;
+    if (GoogleMapLoaded) {
+      this.handleScriptOnLoad();
+    } else {
+      let scriptTag = document.createElement('script');
+      scriptTag.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9LEFx4-NkNFr-WnbVP-DnIVAndzSF04');
+      scriptTag.onload = this.handleScriptOnLoad;
+      GoogleMapLoaded = true;
 
-    document.body.appendChild(scriptTag);
+      document.body.appendChild(scriptTag);
+    }
   },
 
   handleMapCenterChanged() {
@@ -33,6 +39,10 @@ Map = React.createClass({
       // Force update markers
       this.setState({});
     }
+  },
+
+  componentWillUnmount() {
+    google.maps.event.clearListeners(map, 'center_changed');
   },
 
   handleScriptOnLoad() {
@@ -60,9 +70,9 @@ Map = React.createClass({
   },
 
   handleOnSelectMarker(id) {
-    this.setState({
-      selectedId: id
-    });
+    if (this.props.restaurantId != id) {
+      browserHistory.push(`/database/restaurant/${id}`);
+    }
   },
 
   renderMarkers() {
@@ -85,7 +95,7 @@ Map = React.createClass({
             y={point.y}
             name={row.name}
             hidden={hidden}
-            selected={this.state.selectedId === row.id}
+            selected={this.props.restaurantId === row.id}
             onSelect={this.handleOnSelectMarker.bind(null, row.id)}
           />
         );
@@ -147,7 +157,6 @@ Map.Marker = React.createClass({
   },
 
   handleOnClick() {
-    browserHistory.push(`/database/restaurant/${this.props.restaurantId}`);
     if (this.props.onSelect) {
       this.props.onSelect();
     }

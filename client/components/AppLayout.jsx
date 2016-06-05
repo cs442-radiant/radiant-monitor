@@ -2,17 +2,24 @@ import { browserHistory } from 'react-router';
 
 AppLayout = React.createClass({
   getInitialState() {
-    var self = this;
-
-    browserHistory.listen((ev) => {
-      self.setState({
-        currentPath: ev.pathname
-      });
-    });
-
     return {
       currentPath: window.location.pathname
     };
+  },
+
+  componentWillMount() {
+    this.pathChangeListener = browserHistory.listen((ev) => {
+      this.setState({
+        currentPath: ev.pathname
+      });
+    });
+  },
+
+  componentWillUnmount() {
+    if (this.pathChangeListener) {
+      this.pathChangeListener.unlisten();
+      this.pathChangeListener = null;
+    }
   },
 
   render() {

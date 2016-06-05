@@ -32,11 +32,11 @@ const Routes = React.createClass({
               component={RestaurantTable}
             />
             <Route
-              path='restaurant/:id'
+              path='restaurant/:restaurantId'
               component={BundleListTable}
             >
               <Route
-                path='bundle/:bundleid'
+                path='bundle/:bundleId'
                 component={BundleTable}
               />
             </Route>

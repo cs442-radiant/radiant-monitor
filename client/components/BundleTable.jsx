@@ -7,17 +7,18 @@ BundleTable = React.createClass({
 
   getInitialState() {
     return {
-      isSamplesLoaded: false
+      isSamplesLoaded: false,
+      error: false
     };
   },
 
   componentWillMount() {
-    this.loadSamples(this.props.params.bundleid);
+    this.loadSamples(this.props.params.bundleId);
   },
 
   componentWillUpdate(nextProps) {
-    if (nextProps.params.bundleid != this.props.params.bundleid) {
-      this.loadSamples(nextProps.params.bundleid);
+    if (nextProps.params.bundleId != this.props.params.bundleId) {
+      this.loadSamples(nextProps.params.bundleId);
     }
   },
 
@@ -70,24 +71,31 @@ BundleTable = React.createClass({
     });
 
     Meteor.call('getSamples', bundleId, 0, 100, true, (err, result) => {
-      result.payload = result.payload.map((row) => {
-        let result = row;
-        result.sample = JSON.parse(row.sample);
+      if (!err && result.payload && result.numItems && result.bundle) {
+        result.payload = result.payload.map((row) => {
+          let result = row;
+          result.sample = JSON.parse(row.sample);
 
-        return result;
-      });
+          return result;
+        });
 
-      this.computeStatistics(result.payload);
+        this.computeStatistics(result.payload);
 
-      self.setState({
-        rows: result.payload,
-        numItems: result.numItems,
-        bundle: result.bundle,
-        isSamplesLoaded: true
-      });
+        self.setState({
+          rows: result.payload,
+          numItems: result.numItems,
+          bundle: result.bundle,
+          isSamplesLoaded: true,
+          error: false
+        });
 
-      if (self.props.onLoad) {
-        self.props.onLoad();
+        if (self.props.onLoad) {
+          self.props.onLoad();
+        }
+      } else {
+        self.setState({
+          error: true
+        });
       }
     });
   },
@@ -155,6 +163,10 @@ BundleTable = React.createClass({
   },
 
   render() {
+    if (this.state.error) {
+      return <Error />;
+    }
+
     return this.state.isSamplesLoaded ?
       (
         <div>
@@ -178,7 +190,7 @@ BundleTable = React.createClass({
               <span
                 className='bundle-id'
               >
-                {`(Bundle ID: ${this.props.params.bundleid})`}
+                {`(Bundle ID: ${this.props.params.bundleId})`}
               </span>
             </div>
             <NumOfItems
@@ -206,7 +218,10 @@ BundleTable = React.createClass({
           </Section>
         </div>
       ) :
-      <Loader />;
+      <Loader
+        marginOnly={true}
+        margin100vh={true}
+      />;
   }
 });
 
