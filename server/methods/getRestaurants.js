@@ -4,40 +4,19 @@ Meteor.methods({
   getRestaurants: (offset, limit, needCount) => {
     Logger.info(`Get restaurants`);
 
-    let dbCheckFuture = new Future();
-
-    Util.checkAndReconnect((err) => {
-      dbCheckFuture['return'](err);
-    });
-
-    let dbErr = dbCheckFuture.wait();
-
-    if (dbErr) {
-      Logger.error('Failed on reconnecting to DB.');
-      throw new Meteor.Error(500, dbErr);
-    }
-
-    let mainFuture = new Future();
-    let countFuture = new Future();
     let response = {};
 
-    DB.query(`SELECT * FROM Restaurant WHERE hidden=0 LIMIT ${offset}, ${limit}`, (err, rows, fields) => {
-      if (err) {
-        throw new Meteor.Error(500, 'Error occured executing SQL query: ' + err);
-      }
-
-      mainFuture['return'](rows);
-    });
+    response.payload = Meteor.call('dbQuery',
+      'SELECT * FROM Restaurant WHERE hidden=0 LIMIT ?, ?',
+      [offset, limit]
+    );
 
     if (needCount) {
-      DB.query(`SELECT COUNT(*) FROM Restaurant WHERE hidden=0`, (err, rows, fields) => {
-        countFuture['return'](rows[0]['COUNT(*)']);
-      });
-
-      response.numItems = countFuture.wait();
+      response.numItems = Meteor.call('dbQuery',
+        'SELECT COUNT(*) FROM Restaurant WHERE hidden=0',
+        []
+      )[0]['COUNT(*)'];
     }
-
-    response.payload = mainFuture.wait();
 
     return response;
   }

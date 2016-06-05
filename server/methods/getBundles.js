@@ -4,40 +4,25 @@ Meteor.methods({
   getBundles: (restaurantId, offset, limit, needCount) => {
     Logger.info(`Get bundles (restaurantId: ${restaurantId})`);
 
-    let dbCheckFuture = new Future();
-
-    Util.checkAndReconnect((err) => {
-      dbCheckFuture['return'](err);
-    });
-
-    let dbErr = dbCheckFuture.wait();
-
-    if (dbErr) {
-      Logger.error('Failed on reconnecting to DB.');
-      throw new Meteor.Error(500, dbErr);
-    }
-
-    let mainFuture = new Future();
-    let countFuture = new Future();
     let response = {};
 
-    DB.query(`SELECT * FROM Bundle WHERE restaurantId=${restaurantId} LIMIT ${offset}, ${limit}`, (err, rows, fields) => {
-      if (err) {
-        throw new Meteor.Error(500, 'Error occured executing SQL query: ' + err);
-      }
-
-      mainFuture['return'](rows);
-    });
+    response.payload = Meteor.call('dbQuery',
+      'SELECT * FROM Bundle WHERE restaurantId=? LIMIT ?, ?',
+      [restaurantId, offset, limit]
+    );
 
     if (needCount) {
-      DB.query(`SELECT COUNT(*) FROM Bundle WHERE restaurantId=${restaurantId}`, (err, rows, fields) => {
-        countFuture['return'](rows[0]['COUNT(*)']);
-      });
-
-      response.numItems = countFuture.wait();
+      response.numItems = Meteor.call('dbQuery',
+        'SELECT COUNT(*) FROM Bundle WHERE restaurantId=?',
+        [restaurantId]
+      )[0]['COUNT(*)'];
     }
 
-    response.payload = mainFuture.wait();
+    response.bundle = Meteor.call('dbQuery',
+      'SELECT * FROM Bundle WHERE id = ?',
+      [restaurantId]
+    )[0];
+
     response.restaurantName = Meteor.call('getRestaurant', restaurantId).name;
 
     return response;

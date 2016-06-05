@@ -3,7 +3,8 @@ import { browserHistory } from 'react-router';
 Database = React.createClass({
   getInitialState() {
     return {
-      isLoaded: false
+      isLoaded: false,
+      error: false
     };
   },
 
@@ -11,11 +12,18 @@ Database = React.createClass({
     var self = this;
 
     Meteor.call('getRestaurants', 0, 100, true, (err, result) => {
-      self.setState({
-        rows: result.payload,
-        numItems: result.numItems,
-        isLoaded: true
-      });
+      if (!err && result.payload && result.numItems) {
+        self.setState({
+          rows: result.payload,
+          numItems: result.numItems,
+          isLoaded: true,
+          error: false
+        });
+      } else {
+        self.setState({
+          error: true
+        });
+      }
     });
   },
 
@@ -58,11 +66,16 @@ Database = React.createClass({
   },
 
   render() {
+    if (this.state.error) {
+      return <Error />;
+    }
+
     return this.state.isLoaded ?
       (
         <div>
           <Map
             restaurants={this.state.rows}
+            restaurantId={parseInt(this.props.params.restaurantId)}
           />
           {this.renderChildren()}
         </div>
