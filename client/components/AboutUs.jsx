@@ -18,7 +18,7 @@ AboutUs = React.createClass({
           />
           <AboutUs.Profile
             name='JEONGHO JEONG'
-            description={['Server developer', 'Data analysis']}
+            description={['Web monitor page & server developer', 'Data analysis']}
           />
           <AboutUs.Profile
             name='SANGHYUN KIM'
