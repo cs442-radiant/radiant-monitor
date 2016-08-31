@@ -49,6 +49,11 @@ Header = React.createClass({
                 name='DATABASE'
               />
               <Header.Item
+                file='/docs/radiant_report.pdf'
+                fileName='Radiant Final Report.pdf'
+                name='FINAL REPORT'
+              />
+              <Header.Item
                 to='/about'
                 name='ABOUT US'
               />
@@ -64,16 +69,35 @@ Header = React.createClass({
 });
 
 Header.Item = React.createClass({
-  render() {
-    return (
-      <span
-        className='item'
-      >
+  renderLinkOrFile() {
+    if (this.props.to) {
+      return (
         <Link
           to={this.props.to}
         >
           {this.props.name}
         </Link>
+      );
+    } else if (this.props.file) {
+      return (
+        <a
+          href={this.props.file}
+          download={this.props.fileName}
+        >
+          {this.props.name}
+        </a>
+      );
+    }
+
+    return null;
+  },
+
+  render() {
+    return (
+      <span
+        className='item'
+      >
+        {this.renderLinkOrFile()}
       </span>
     );
   }
